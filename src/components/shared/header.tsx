@@ -16,7 +16,6 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Menu,
   ShoppingCart,
@@ -102,15 +101,9 @@ const Header = () => {
                   variant="ghost"
                   className="relative h-10 w-10 rounded-full"
                 >
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage
-                      src={user.photoURL || 'https://i.pravatar.cc/150'}
-                      alt="User Avatar"
-                    />
-                    <AvatarFallback>
-                      {user.email?.[0].toUpperCase() || 'U'}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
+                    <span>{user.email?.[0].toUpperCase() || 'U'}</span>
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -175,7 +168,7 @@ const Header = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
-                <SheetTitle>Menu</SheetTitle>
+                <SheetTitle className='sr-only'>Mobile Menu</SheetTitle>
                 <Logo className="mb-8" />
                 <div className="flex flex-col space-y-4">
                   {navLinks.map((link) => (

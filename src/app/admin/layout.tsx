@@ -22,7 +22,7 @@ import {
   LogOut,
   ShieldCheck,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth, useUser } from "@/firebase";
 import { signOut } from "firebase/auth";
@@ -101,7 +101,6 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             <p className="font-semibold">Admin Panel</p>
           </div>
           <Avatar className="h-9 w-9">
-            <AvatarImage src={user?.photoURL || "https://i.pravatar.cc/150?u=a04258114e29026702d"} alt="Admin" />
             <AvatarFallback>{user?.email?.[0].toUpperCase() || 'A'}</AvatarFallback>
           </Avatar>
         </header>
