@@ -62,9 +62,9 @@ Optional UI Tools	Bootstrap / Tailwind / Custom CSS
 Follow these steps to run the project locally:
 
 1. Clone the repository
-git clone https://github.com/vinnyprajapati17/Catering-Ease/tree/main.git
+https://github.com/vinnyprajapati17/Catering-Ease.git
 2. Open the project folder
-cd your-repo-name
+gh repo clone vinnyprajapati17/Catering-Ease
 
 3. Configure Firebase
 
