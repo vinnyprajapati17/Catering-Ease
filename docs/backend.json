@@ -1,0 +1,295 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the CateringEase system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the user."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address of the user."
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email"
+      ]
+    },
+    "Admin": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Admin",
+      "type": "object",
+      "description": "Represents an administrator of the CateringEase system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Admin entity."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the admin."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the admin."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the admin.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the admin."
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email"
+      ]
+    },
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "Represents a catering product offered by CateringEase.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Product entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the product."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the product."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the product image.",
+          "format": "uri"
+        },
+        "price": {
+          "type": "number",
+          "description": "Price of the product."
+        },
+        "adminId": {
+          "type": "string",
+          "description": "Reference to Admin. (Relationship: Admin 1:N Product)"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "imageUrl",
+        "price",
+        "adminId"
+      ]
+    },
+    "Order": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Order",
+      "type": "object",
+      "description": "Represents a catering order placed by a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Order entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Order)"
+        },
+        "orderDate": {
+          "type": "string",
+          "description": "Date and time when the order was placed.",
+          "format": "date-time"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total amount of the order."
+        },
+        "orderItems": {
+          "type": "array",
+          "description": "List of order items",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "orderDate",
+        "totalAmount"
+      ]
+    },
+    "OrderItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "OrderItem",
+      "type": "object",
+      "description": "Represents an item within a catering order.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the OrderItem entity."
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Reference to Order. (Relationship: Order 1:N OrderItem)"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to Product. (Relationship: Product 1:N OrderItem)"
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity of the product in the order item."
+        },
+        "unitPrice": {
+          "type": "number",
+          "description": "Price of one unit of the product at the time of order."
+        }
+      },
+      "required": [
+        "id",
+        "orderId",
+        "productId",
+        "quantity",
+        "unitPrice"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profile information. Path-based ownership: only the user can read/write their own document.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/admins/{adminId}",
+        "definition": {
+          "entityName": "Admin",
+          "schema": {
+            "$ref": "#/backend/entities/Admin"
+          },
+          "description": "Stores admin profile information. Path-based ownership: only the admin can read/write their own document.",
+          "params": [
+            {
+              "name": "adminId",
+              "description": "The unique identifier for the admin."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Stores product details. Includes 'adminId' for authorization independence.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "The unique identifier for the product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores order information. Nested under users for clear ownership and authorization.  Includes denormalized 'userId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "orderId",
+              "description": "The unique identifier for the order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/orders/{orderId}/orderItems/{orderItemId}",
+        "definition": {
+          "entityName": "OrderItem",
+          "schema": {
+            "$ref": "#/backend/entities/OrderItem"
+          },
+          "description": "Stores individual items within an order.  Nested under orders to maintain the relationship.  Authorization inherited from the parent order.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "orderId",
+              "description": "The unique identifier for the order."
+            },
+            {
+              "name": "orderItemId",
+              "description": "The unique identifier for the order item."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to support the CateringEase application, focusing on user and admin authentication, product management, ordering, and profile management. The structure enforces Authorization Independence and supports QAPs.  \n\n1.  **Users Collection (`/users/{userId}`):** Stores user profile information.  Authorization is path-based, enabling simple rules (only the user can read/write their own document).\n2.  **Admins Collection (`/admins/{adminId}`):** Stores admin profile information. Authorization is path-based. Only the admin can read/write their own profile.\n3.  **Products Collection (`/products/{productId}`):** Stores product details. Each product includes an `adminId` field to track the admin who created it.  List operations are secured, as only admins can create/update products.\n4.  **Orders Collection (`/users/{userId}/orders/{orderId}`):**  Stores order information related to specific users. This nested structure ensures clear ownership.  Each order is associated with a `userId`, facilitating path-based authorization. List operation are secured, as only the user or the admin can read/write orders.\n5.  **OrderItems Collection (`/users/{userId}/orders/{orderId}/orderItems/{orderItemId}`):** Stores the individual items within an order. Nested under orders to maintain the relationship. Authorization is inherited from the parent order, ensuring only the user who placed the order (or an admin) can access or modify the order items.\n\n**Authorization Independence (Denormalization):**\n*   The `products` collection includes the `adminId` field, enabling rules to verify product creation/modification permissions without needing to `get()` the admin document.\n*   The `orders` collection is nested under `/users/{userId}`. This design inherently ties each order to a specific user, making authorization simple and independent.\n\n**QAPs Support:**\n*   **List Operations:** The segregation of data into collections with homogeneous security postures allows for secure list operations. For example:\n    *   Listing products can be restricted to admins or made public without exposing private user data.\n    *   Listing orders is secured via the `/users/{userId}/orders` path; only the authenticated user `userId` can list their own orders.\n\nThis structure is highly scalable and debuggable, as authorization logic is localized to individual collections and documents, avoiding complex hierarchical dependencies."
+  }
+}

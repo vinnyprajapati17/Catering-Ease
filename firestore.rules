@@ -1,0 +1,145 @@
+/**
+ * Core Philosophy: This ruleset implements a dual-role security model for a catering application,
+ * distinguishing between standard 'Users' and privileged 'Admins'. The primary principle is strict
+ * data ownership, where users can only access and manage their own data (profiles, orders).
+ * Admins have broader permissions, including managing the public product catalog and viewing/managing
+ * all user orders for fulfillment purposes.
+ *
+ * Data Structure:
+ * - /users/{userId}: Private user profiles.
+ * - /admins/{adminId}: Private admin profiles. Admin role is determined by the existence of a document here.
+ * - /products/{productId}: A public catalog of products, writable only by admins.
+ * - /users/{userId}/orders/{orderId}: User-specific orders, nested for clear ownership.
+ * - /users/{userId}/orders/{orderId}/orderItems/{orderItemId}: Line items for an order.
+ *
+ * Key Security Decisions:
+ * - Admin Role Check: A user is considered an 'Admin' if a document with their UID exists in the /admins collection.
+ *   This is checked using `exists()`, which is highly efficient.
+ * - No User/Admin Listing: Top-level listing of the /users and /admins collections is disabled to prevent
+ *   user enumeration and protect privacy.
+ * - Public Product Catalog: The /products collection is publicly readable by anyone (including unauthenticated users)
+ *   to allow browsing, but write access is restricted to admins.
+ * - Admin Order Oversight: Admins have full read and write access to all user orders and order items to
+ *   facilitate order processing and customer support.
+ *
+ * Denormalization for Authorization:
+ * - Products contain a denormalized `adminId` field. This allows rules to verify that the user modifying a
+ *   product is an admin without requiring extra document reads.
+ * - Orders are nested under `/users/{userId}` and also contain a `userId`. This path-based ownership combined
+ *   with the internal field provides a robust and simple way to secure user data.
+ *
+ * Structural Segregation:
+ * - Private user data (orders) is structurally segregated under a user-specific path (`/users/{userId}/...`),
+ *   ensuring that queries for one user's data cannot accidentally leak another's.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----------------------------------------------------------------------
+    // Helper Functions
+    // ----------------------------------------------------------------------
+
+    /**
+     * Checks if the user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the authenticated user's UID matches the provided userId.
+     * This is the foundation for the ownership model.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Checks if the authenticated user is an administrator.
+     * The role is granted if a document for the user exists in the /admins collection.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // ----------------------------------------------------------------------
+    // Collection Rules
+    // ----------------------------------------------------------------------
+
+    /**
+     * @description Manages user profile documents.
+     * @path /users/{userId}
+     * @allow A user (create)s their own profile document with a matching `id`. auth.uid: "user_abc", path: /users/user_abc
+     * @deny An anonymous user tries to read a user's profile. auth.uid: null, path: /users/user_abc
+     * @principle Restricts access to a user's own data tree and prevents user enumeration.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false;
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isOwner(userId) && resource != null;
+      allow delete: if isOwner(userId) && resource != null;
+    }
+
+    /**
+     * @description Manages administrator profile documents.
+     * @path /admins/{adminId}
+     * @allow An admin (get)s their own profile document. auth.uid: "admin_abc", path: /admins/admin_abc
+     * @deny A standard user tries to view an admin's profile. auth.uid: "user_123", path: /admins/admin_abc
+     * @principle Restricts access to an admin's own data and prevents admin enumeration.
+     */
+    match /admins/{adminId} {
+      allow get: if isOwner(adminId);
+      allow list: if false;
+      allow create: if isOwner(adminId) && request.resource.data.id == adminId;
+      allow update: if isOwner(adminId) && resource != null;
+      allow delete: if isOwner(adminId) && resource != null;
+    }
+
+    /**
+     * @description Manages the public product catalog.
+     * @path /products/{productId}
+     * @allow An admin (create)s a new product, setting their own ID as the `adminId`. auth.uid: "admin_abc"
+     * @deny A standard user tries to (update) a product. auth.uid: "user_123"
+     * @principle Enforces public read access for the catalog while restricting all writes to administrators.
+     */
+    match /products/{productId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isAdmin() && request.resource.data.adminId == request.auth.uid;
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Manages user order documents.
+     * @path /users/{userId}/orders/{orderId}
+     * @allow The user (create)s a new order for themselves. auth.uid: "user_abc", path: /users/user_abc/orders/order_123
+     * @deny Another user tries to (get) an order that is not theirs. auth.uid: "user_xyz", path: /users/user_abc/orders/order_123
+     * @principle Enforces document ownership for users, but grants full oversight to admins.
+     */
+    match /users/{userId}/orders/{orderId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if (isOwner(userId) || isAdmin()) && resource != null;
+      allow delete: if (isOwner(userId) || isAdmin()) && resource != null;
+
+      /**
+       * @description Manages items within a user's order.
+       * @path /users/{userId}/orders/{orderId}/orderItems/{orderItemId}
+       * @allow An admin (get)s an order item to check stock. auth.uid: "admin_abc", path: /users/user_abc/orders/order_123/orderItems/item_xyz
+       * @deny A user tries to (delete) an order item from someone else's order. auth.uid: "user_xyz", path: /users/user_abc/orders/order_123/orderItems/item_xyz
+       * @principle Inherits authorization from the parent order, ensuring consistent access control.
+       */
+      match /orderItems/{orderItemId} {
+        allow get: if isOwner(userId) || isAdmin();
+        allow list: if isOwner(userId) || isAdmin();
+        allow create: if isOwner(userId) && request.resource.data.orderId == orderId;
+        allow update: if (isOwner(userId) || isAdmin()) && resource != null;
+        allow delete: if (isOwner(userId) || isAdmin()) && resource != null;
+      }
+    }
+  }
+}
