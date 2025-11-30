@@ -1,3 +1,4 @@
+
 "use client"
 
 // Inspired by react-hot-toast library
@@ -7,7 +8,6 @@ import type {
   ToastActionElement,
   ToastProps,
 } from "@/components/ui/toast"
-import { useToast as useShadcnToast } from "@/components/ui/use-toast"
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
@@ -192,4 +192,4 @@ function useToast() {
   }
 }
 
-export { useToast, toast, useShadcnToast }
+export { useToast, toast }

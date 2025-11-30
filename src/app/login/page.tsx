@@ -18,6 +18,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth, useUser, initiateEmailSignIn } from '@/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
+import { useToast } from '@/hooks/use-toast';
+import type { FirebaseError } from 'firebase/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -26,6 +28,7 @@ export default function LoginPage() {
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const firestore = useFirestore();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!isUserLoading && user) {
@@ -42,8 +45,24 @@ export default function LoginPage() {
     }
   }, [user, isUserLoading, router, firestore]);
 
+  const handleLoginError = (error: FirebaseError) => {
+    let title = 'An error occurred';
+    let description = 'Please try again later.';
+
+    if (error.code === 'auth/invalid-credential') {
+      title = 'Login Failed';
+      description = 'The email or password you entered is incorrect.';
+    }
+
+    toast({
+      variant: 'destructive',
+      title: title,
+      description: description,
+    });
+  };
+
   const handleLogin = () => {
-    initiateEmailSignIn(auth, email, password);
+    initiateEmailSignIn(auth, email, password, handleLoginError);
   };
 
   if (isUserLoading || user) {
@@ -97,6 +116,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
               />
             </div>
           </CardContent>

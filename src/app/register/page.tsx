@@ -23,7 +23,9 @@ import {
 } from '@/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, type FirebaseError } from 'firebase/auth';
+import { useToast } from '@/hooks/use-toast';
+
 
 export default function RegisterPage() {
   const [fullName, setFullName] = useState('');
@@ -34,6 +36,7 @@ export default function RegisterPage() {
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const firestore = useFirestore();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!isUserLoading && user) {
@@ -41,12 +44,33 @@ export default function RegisterPage() {
     }
   }, [user, isUserLoading, router]);
 
+  const handleRegisterError = (error: FirebaseError) => {
+    let title = 'Registration Failed';
+    let description = 'An unexpected error occurred. Please try again.';
+
+    if (error.code === 'auth/email-already-in-use') {
+      description = 'This email is already registered. Please log in instead.';
+    } else if (error.code === 'auth/weak-password') {
+      description = 'The password is too weak. Please choose a stronger password.';
+    }
+    
+    toast({
+      variant: 'destructive',
+      title,
+      description,
+    });
+  }
+
   const handleRegister = () => {
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+       toast({
+        variant: 'destructive',
+        title: 'Registration Failed',
+        description: 'Passwords do not match.',
+      });
       return;
     }
-    initiateEmailSignUp(auth, email, password);
+    initiateEmailSignUp(auth, email, password, handleRegisterError);
   };
 
   useEffect(() => {
@@ -134,6 +158,7 @@ export default function RegisterPage() {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleRegister()}
               />
             </div>
           </CardContent>
