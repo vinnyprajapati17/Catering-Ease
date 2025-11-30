@@ -10,6 +10,7 @@ import {
 import {
   Sheet,
   SheetContent,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -131,6 +132,7 @@ const Header = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
+                <SheetTitle className="sr-only">Menu</SheetTitle>
                 <Logo className="mb-8" />
                 <div className="flex flex-col space-y-4">
                   {navLinks.map((link) => (
