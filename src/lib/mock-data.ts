@@ -68,6 +68,38 @@ export const mockProducts: Product[] = [
     image: getImage('salad-bowl').imageUrl,
     imageHint: getImage('salad-bowl').imageHint,
   },
+  {
+    id: "prod_009",
+    name: "Pasta Primavera",
+    description: "Fresh pasta with spring vegetables in a light cream sauce.",
+    price: 85.0,
+    image: getImage('pasta-dish').imageUrl,
+    imageHint: getImage('pasta-dish').imageHint,
+  },
+  {
+    id: "prod_010",
+    name: "Taco Platter",
+    description: "Build-your-own tacos with assorted fillings and toppings.",
+    price: 95.0,
+    image: getImage('taco-platter').imageUrl,
+    imageHint: getImage('taco-platter').imageHint,
+  },
+  {
+    id: "prod_011",
+    name: "Sushi Assortment",
+    description: "A beautiful arrangement of fresh sushi and sashimi.",
+    price: 150.0,
+    image: getImage('sushi-assortment').imageUrl,
+    imageHint: getImage('sushi-assortment').imageHint,
+  },
+  {
+    id: "prod_012",
+    name: "Vegetarian Curry",
+    description: "Aromatic vegetable curry served with basmati rice.",
+    price: 80.0,
+    image: getImage('vegetarian-curry').imageUrl,
+    imageHint: getImage('vegetarian-curry').imageHint,
+  },
 ];
 
 export const mockOrders: Order[] = [

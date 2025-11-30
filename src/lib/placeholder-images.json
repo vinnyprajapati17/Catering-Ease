@@ -47,6 +47,30 @@
       "description": "A platter of fresh, colorful fruits",
       "imageUrl": "https://images.unsplash.com/photo-1485962093642-5f4386e84429?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmcnVpdCUyMHBsYXR0ZXJ8ZW58MHx8fHwxNzY0NDMxNjgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "fruit platter"
+    },
+    {
+      "id": "pasta-dish",
+      "description": "A hearty pasta dish",
+      "imageUrl": "https://images.unsplash.com/photo-1619568786047-4b87d46c0b5f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGFzdGElMjBkaXNofGVufDB8fHx8MTc2NDQ3MzY3MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "pasta dish"
+    },
+    {
+      "id": "taco-platter",
+      "description": "A vibrant platter of tacos",
+      "imageUrl": "https://images.unsplash.com/photo-1636750252103-f5287f937e1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0YWNvJTIwcGxhdHRlcnxlbnwwfHx8fDE3NjQ1MjMzMzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "taco platter"
+    },
+    {
+      "id": "sushi-assortment",
+      "description": "An assortment of fresh sushi",
+      "imageUrl": "https://images.unsplash.com/photo-1764183122524-974ccfb709fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzdXNoaSUyMGFzc29ydG1lbnR8ZW58MHx8fHwxNzY0NTIzMzM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sushi assortment"
+    },
+    {
+      "id": "vegetarian-curry",
+      "description": "A bowl of rich vegetarian curry",
+      "imageUrl": "https://images.unsplash.com/photo-1671507136750-05ebd0f97843?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2ZWdldGFyaWFuJTIwY3Vycnl8ZW58MHx8fHwxNzY0NTIzMzM4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "vegetarian curry"
     }
   ]
 }
