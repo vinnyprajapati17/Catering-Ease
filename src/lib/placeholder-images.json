@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "appetizers",
+      "description": "A platter of assorted appetizers",
+      "imageUrl": "https://images.unsplash.com/photo-1764315975176-a0281c4b4f08?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxhcHBldGl6ZXIlMjBwbGF0dGVyfGVufDB8fHx8MTc2NDQ4MDU1OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "appetizer platter"
+    },
+    {
+      "id": "main-course",
+      "description": "A well-plated main course dish",
+      "imageUrl": "https://images.unsplash.com/photo-1761315414500-a72142016572?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxnb3VybWV0JTIwZW50cmVlfGVufDB8fHx8MTc2NDQ4ODY0N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gourmet entree"
+    },
+    {
+      "id": "desserts",
+      "description": "An assortment of delicious desserts",
+      "imageUrl": "https://images.unsplash.com/photo-1611255949120-c68094a73c9f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxkZXNzZXJ0JTIwYXNzb3J0bWVudHxlbnwwfHx8fDE3NjQ0ODA1NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dessert assortment"
+    },
+    {
+      "id": "beverages",
+      "description": "A collection of refreshing beverages",
+      "imageUrl": "https://images.unsplash.com/photo-1681579289916-af960b852352?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjb2xvcmZ1bCUyMGNvY2t0YWlsc3xlbnwwfHx8fDE3NjQ0ODg2NDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "colorful cocktails"
+    },
+    {
+      "id": "salad-bowl",
+      "description": "A fresh and vibrant salad bowl",
+      "imageUrl": "https://images.unsplash.com/photo-1644172971013-b3dfee71fa0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmcmVzaCUyMHNhbGFkfGVufDB8fHx8MTc2NDQ4ODY0N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fresh salad"
+    },
+    {
+      "id": "seafood-platter",
+      "description": "An extravagant seafood platter",
+      "imageUrl": "https://images.unsplash.com/photo-1595579547936-c3a0e6c171fc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzZWFmb29kJTIwcGxhdHRlcnxlbnwwfHx8fDE3NjQ0ODg2NDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "seafood platter"
+    },
+    {
+      "id": "cheese-board",
+      "description": "A curated cheese board with fruits and nuts",
+      "imageUrl": "https://images.unsplash.com/photo-1601912262364-3a35aa0d9399?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjaGVlc2UlMjBib2FyZHxlbnwwfHx8fDE3NjQ0ODYwNjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cheese board"
+    },
+    {
+      "id": "fruit-platter",
+      "description": "A platter of fresh, colorful fruits",
+      "imageUrl": "https://images.unsplash.com/photo-1485962093642-5f4386e84429?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmcnVpdCUyMHBsYXR0ZXJ8ZW58MHx8fHwxNzY0NDMxNjgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fruit platter"
+    }
+  ]
 }
