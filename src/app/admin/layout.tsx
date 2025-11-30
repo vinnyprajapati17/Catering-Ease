@@ -24,10 +24,21 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useAuth, useUser } from "@/firebase";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const isActive = (path: string) => pathname === path;
+  const auth = useAuth();
+  const { user } = useUser();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    signOut(auth);
+    router.push('/');
+  };
 
   return (
     <SidebarProvider>
@@ -74,11 +85,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
               </SidebarMenuButton>
             </SidebarMenuItem>
              <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Logout">
-                <Link href="/">
+              <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
                   <LogOut />
                   <span>Logout</span>
-                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -92,8 +101,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             <p className="font-semibold">Admin Panel</p>
           </div>
           <Avatar className="h-9 w-9">
-            <AvatarImage src="https://i.pravatar.cc/150?u=a04258114e29026702d" alt="Admin" />
-            <AvatarFallback>A</AvatarFallback>
+            <AvatarImage src={user?.photoURL || "https://i.pravatar.cc/150?u=a04258114e29026702d"} alt="Admin" />
+            <AvatarFallback>{user?.email?.[0].toUpperCase() || 'A'}</AvatarFallback>
           </Avatar>
         </header>
         <main className="p-4 md:p-8">{children}</main>
